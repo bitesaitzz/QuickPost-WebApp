@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messages</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Messages</h1>
+</header>
+
+<div class="container">
+    <section>
+        <h2>Add a New Message</h2>
+        <form th:method="POST" th:object="${message}" th:action="@{/add}" enctype="multipart/form-data">
+            <input type="text" name="text" placeholder="Enter name" th:field="*{text}"/>
+            <input type="text" name="tag" placeholder="Enter tag" th:field="*{tag}" />
+            <input type="file" name="file" placeholder="Upload file">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit">Add</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Filter Messages</h2>
+        <form th:method="POST" th:action="@{/filter}">
+            <input type="text" name="tag" placeholder="Enter tag"/>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit">Filter</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>List of Messages</h2>
+        <div th:each="message : ${messages}" class="message">
+            <p>
+                <a th:href="@{/{id}/message(id=${message.id})}" style="text-decoration: none; color: inherit;">
+                    <span th:text="${message.id}"></span>
+                    <span th:text="${message.text}"></span>
+                    <span th:text="${message.tag}"></span>
+                    <span th:text="${message.person.name}"></span>
+                </a>
+                <span th:if="${message.fileId}">
+                    Filename : <a th:href="${storageUrl + '/get/' + message.fileId + '?userid = ' + person.id}" th:text = "${message.fileName}"> </a>
+                </span>
+                <span th:if="${message.photo}">
+                    <img th:src="${storageUrl + '/get/' + message.fileId + '?userid = ' + person.id}" class="message-photo" />
+                </span>
+
+            </p>
+        </div>
+    </section>
+</div>
+<div>
+    <button th:if="${currentPage > 0}" th:onclick="|window.location.href='@{/messages(page=${currentPage - 1})}'|">Previous Page</button>
+    <button th:if="${currentPage < totalPages - 1}" th:onclick="|window.location.href='@{/messages(page=${currentPage + 1})}'|">Next Page</button>
+</div>
+<footer>
+    <a href="/auth/logout">Logout</a>
+</footer>
+
+</body>
+</html>

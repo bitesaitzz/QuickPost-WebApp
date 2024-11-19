@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messages</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Message</h1>
+</header>
+
+<div class="container">
+
+    <section>
+        <h2>Message</h2>
+        <div class="message">
+            <p>
+                <span th:text="${message.id}"></span>
+                <span th:text="${message.text}"></span>
+                <span th:text="${message.tag}"></span>
+                <span th:text="${message.person.name}"></span>
+                <span th:if="${message.photo}">
+                    <img th:src="${storageUrl + '/get/' + message.fileId + '?uuid = ' + person.id}" class="message-photo" />
+                </span>
+                <span th:if="${message.fileId}">
+                    Filename : <a th:href="${storageUrl + '/get/' + message.fileId}" th:text = "${message.fileName}"> </a>
+                </span>
+                <div th:if="${filesDTO}">
+                    <span th:text="${filesDTO.createdAt}"></span>
+                    <span th:text="${filesDTO.fileSize}"></span>
+                    <span th:text="${filesDTO.tag}"></span>
+                    <span th:text="${filesDTO.fileType}"></span>
+                    <div th:each="accessLog : ${filesDTO.fileAccessLog}">
+                        <span th:text="${accessLog.accessedAt}"></span>
+                        <span th:text="${accessLog.person.name}"></span>
+
+                    </div>
+                </div>
+            </p>
+        </div>
+    </section>
+</div>
+
+
+
+<footer>
+    <a href="/messages">Back</a>
+    <a href="/auth/logout">Logout</a>
+</footer>
+
+</body>
+</html>

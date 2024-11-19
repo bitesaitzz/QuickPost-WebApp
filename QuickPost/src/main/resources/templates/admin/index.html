@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/css/style2.css">
+</head>
+<body>
+
+<h1>Admin Page</h1>
+
+<div class="user-list">
+    <div th:each="user, iterStat : ${users}" class="user">
+        <p>
+            <span th:text="${iterStat.count}">1</span>.
+            <span th:text="${user.name}">User Name</span>,
+            <span th:text="${user.email}">user@example.com</span>
+        </p>
+        <form th:method="post" th:action="@{/admin/{id}/updateRole(id=${user.id})}" class="update-role-form">
+            <select name="role">
+                <option th:each="role : ${roles}"
+                        th:value="${role}"
+                        th:text="${role}"
+                        th:selected="${role == user.role}">
+                </option>
+            </select>
+            <button type="submit">Update Role</button>
+        </form>
+        <form th:method="post" th:action="@{/admin/{id}/delete(id=${user.id})}" class="delete-user-form">
+            <button type="submit">Delete User</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
